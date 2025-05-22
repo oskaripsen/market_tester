@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'typography.dart';
+import 'dimens.dart';
 
 class AppTheme {
   static ThemeData get lightTheme {
@@ -23,6 +24,7 @@ class AppTheme {
         onError: Colors.white,
         brightness: Brightness.light,
       ),
+      scaffoldBackgroundColor: AppColors.background,
       textTheme: TextTheme(
         displayLarge: AppTypography.h1,
         displayMedium: AppTypography.h2,
@@ -33,8 +35,8 @@ class AppTheme {
         labelLarge: AppTypography.button,
       ),
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.surface,
+        foregroundColor: AppColors.textPrimary,
         elevation: 0,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -43,10 +45,26 @@ class AppTheme {
           backgroundColor: AppColors.primary,
           textStyle: AppTypography.button,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
           ),
+          elevation: AppDimens.elevationMedium,
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
+          borderSide: BorderSide(color: AppColors.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimens.radiusMedium),
+          borderSide: BorderSide(color: AppColors.primary),
+        ),
+        hintStyle: TextStyle(color: AppColors.textHint),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: AppDimens.spacing16,
+          vertical: AppDimens.spacing12,
         ),
       ),
     );
   }
-} 
+}

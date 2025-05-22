@@ -88,6 +88,8 @@ class AuthService extends ChangeNotifier {
         accessToken: storedToken,
         idToken: '',  // We don't have the ID token from storage
         expiresAt: DateTime.now().add(const Duration(hours: 1)), // Placeholder
+        user: UserProfile(sub: 'stored_user'),
+        tokenType: 'Bearer',
       );
       
       notifyListeners();

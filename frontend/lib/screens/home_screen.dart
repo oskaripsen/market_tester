@@ -147,25 +147,29 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Display Auth0 user profile information
                         _buildProfileItem('Name', authService.userProfile?.name ?? 'N/A'),
                         _buildProfileItem('Email', authService.userProfile?.email ?? 'N/A'),
-                        if (authService.userProfile?.picture != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Row(
-                              children: [
-                                const Text(
-                                  'Picture:',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                        _buildProfileItem('User ID', authService.userProfile?.sub ?? 'N/A'),
+                        
+                        // Profile picture - display an icon instead
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              const Text(
+                                'Profile:',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(width: 8),
+                              CircleAvatar(
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                child: Icon(
+                                  Icons.person,
+                                  color: Theme.of(context).colorScheme.onPrimary,
                                 ),
-                                const SizedBox(width: 8),
-                                CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                    authService.userProfile!.picture!,
-                                  ),
-                                  radius: 20,
-                                ),
-                              ],
-                            ),
+                                radius: 20,
+                              ),
+                            ],
                           ),
+                        ),
                       ],
                     ),
                   ),

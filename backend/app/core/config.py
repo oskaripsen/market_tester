@@ -1,6 +1,6 @@
 import os
-from typing import List, Union
-from pydantic import AnyHttpUrl, validator
+from typing import List, Union, Optional, Annotated
+from pydantic import AnyHttpUrl, Field, model_validator
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
@@ -8,32 +8,36 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Market Tester"
     
     # CORS
-    CORS_ORIGINS: List[AnyHttpUrl] = []
-
-    @validator("CORS_ORIGINS", pre=True)
-    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, (list, str)):
-            return v
-        raise ValueError(v)
+    CORS_ORIGINS: List[str] = []
 
     # Database
-    SQLALCHEMY_DATABASE_URI: str = os.getenv(
-        "DATABASE_URL", "sqlite:///./market_tester.db"
-    )
+    SQLALCHEMY_DATABASE_URI: str = "sqlite:///./market_tester.db"
     
     # Auth0 settings
-    AUTH0_DOMAIN: str = os.getenv("AUTH0_DOMAIN", "")
-    AUTH0_API_AUDIENCE: str = os.getenv("AUTH0_API_AUDIENCE", "")
+    AUTH0_DOMAIN: str = ""
+    AUTH0_API_AUDIENCE: str = ""
     AUTH0_ALGORITHMS: List[str] = ["RS256"]
-    AUTH0_ISSUER: str = os.getenv("AUTH0_ISSUER", "")
-    AUTH0_CLIENT_ID: str = os.getenv("AUTH0_CLIENT_ID", "")
-    AUTH0_CLIENT_SECRET: str = os.getenv("AUTH0_CLIENT_SECRET", "")
+    AUTH0_ISSUER: str = ""
+    AUTH0_CLIENT_ID: str = ""
+    AUTH0_CLIENT_SECRET: str = ""
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
+    @model_validator(mode='before')
+    def validate_cors_origins(cls, values):
+        cors_origins = values.get('CORS_ORIGINS')
+        if isinstance(cors_origins, str):
+            if cors_origins.startswith('[') and cors_origins.endswith(']'):
+                # It's a JSON string, let it be parsed by pydantic
+                pass
+            else:
+                # It's a comma-separated string
+                values['CORS_ORIGINS'] = [origin.strip() for origin in cors_origins.split(',')]
+        return values
+    
+    model_config = {
+        "env_file": ".env",
+        "case_sensitive": True,
+        "extra": "ignore"
+    }
 
 
 settings = Settings() 

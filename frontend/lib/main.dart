@@ -7,6 +7,7 @@ import 'services/config_service.dart';
 import 'config/app_config.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/landing_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -76,6 +77,12 @@ class MyApp extends StatelessWidget {
             ],
             child: Consumer<AuthService>(
               builder: (context, authService, _) {
+                // Show landing page for non-authenticated users
+                return const LandingPage();
+                
+                // After they sign up or log in, we can check auth status
+                // Uncomment this when ready to implement authentication flow
+                /*
                 return FutureBuilder<bool>(
                   future: authService.checkAuth(),
                   builder: (context, authSnapshot) {
@@ -104,6 +111,7 @@ class MyApp extends StatelessWidget {
                     }
                   },
                 );
+                */
               },
             ),
           );

@@ -1,0 +1,50 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 📐 .cursor-architecture.md
+
+## 🧠 Project Architecture Guidelines for `market_tester/`
+
+This document defines the enforced architecture for the **AI Persona Simulator** project. All code contributions and AI-generated files must comply with this structure.
+
+---
+
+## 🗂️ Directory Structure (Required)
+
+```plaintext
+market_tester/
+├── frontend/
+│   ├── lib/
+│   │   ├── core/                    # Standard UI widgets and layout helpers
+│   │   ├── theme/                   # Central design system (colors, text, dimensions)
+│   │   ├── models/                  # Data models (Persona, TestResult, etc.)
+│   │   ├── services/                # Business logic and app-specific logic
+│   │   ├── repositories/            # Handles API communication
+│   │   ├── screens/                 # Page-level UI screens
+│   │   ├── widgets/                 # Domain-specific reusable UI components
+│   │   ├── utils/                   # General-purpose utility functions
+│   │   ├── config/                  # Environment switching, constants
+│   │   └── main.dart                # App entry point
+│   ├── assets/                      # Fonts, images, icons
+│   ├── test/                        # Unit and widget tests
+│   └── pubspec.yaml
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── routes/              # API endpoint definitions
+│   │   │   └── dependencies/        # Reusable API dependencies
+│   │   ├── core/                    # App configuration and global logic
+│   │   ├── db/
+│   │   │   ├── models/              # SQLAlchemy ORM models
+│   │   │   ├── session.py
+│   │   │   └── base.py
+│   │   ├── schemas/                 # Pydantic models for input/output validation
+│   │   ├── services/                # Business logic (simulation, scoring)
+│   │   ├── utils/                   # Prompt building, formatting, helper functions
+│   │   └── main.py                  # FastAPI application entrypoint
+│   ├── tests/                       # Backend unit and integration tests
+│   ├── requirements.txt
+│   └── fly.toml

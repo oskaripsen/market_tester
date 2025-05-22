@@ -2,30 +2,30 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 
 class AppTypography {
-  static const String _fontFamily = 'Roboto';
-  
+  static const String _fontFamily = 'Inter';
+
   // Headings
   static const TextStyle h1 = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 24.0,
+    fontSize: 28.0,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );
-  
+
   static const TextStyle h2 = TextStyle(
     fontFamily: _fontFamily,
-    fontSize: 20.0,
-    fontWeight: FontWeight.bold,
+    fontSize: 22.0,
+    fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
-  
+
   static const TextStyle h3 = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 18.0,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
   );
-  
+
   // Body text
   static const TextStyle bodyLarge = TextStyle(
     fontFamily: _fontFamily,
@@ -33,21 +33,21 @@ class AppTypography {
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
   );
-  
+
   static const TextStyle body = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 14.0,
     fontWeight: FontWeight.normal,
     color: AppColors.textPrimary,
   );
-  
+
   static const TextStyle bodySmall = TextStyle(
     fontFamily: _fontFamily,
     fontSize: 12.0,
     fontWeight: FontWeight.normal,
     color: AppColors.textSecondary,
   );
-  
+
   // Button text
   static const TextStyle button = TextStyle(
     fontFamily: _fontFamily,
@@ -56,4 +56,4 @@ class AppTypography {
     letterSpacing: 1.25,
     color: AppColors.surface,
   );
-} 
+}
