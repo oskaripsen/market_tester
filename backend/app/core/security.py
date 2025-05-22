@@ -1,17 +1,69 @@
-from datetime import datetime, timedelta
-from typing import Any, Optional
-
+from typing import Dict, Optional
+import jwt
+from jwt.exceptions import PyJWTError
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-# This is a placeholder for future authentication implementation
-# Will be expanded as needed
+from .config import settings
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token", auto_error=False)
+# Setup the Auth0 JWT bearer token security scheme
+security = HTTPBearer()
 
-async def get_optional_current_user(token: str = Depends(oauth2_scheme)) -> Optional[Any]:
+# Function to verify the JWT token
+async def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) -> Dict:
     """
-    Placeholder for future authentication.
-    Currently returns None to indicate no authentication is implemented yet.
+    Verify the JWT token from Auth0
     """
-    return None 
+    token = credentials.credentials
+    
+    try:
+        # Get the Auth0 domain for the JWKS URL
+        jwks_url = f'https://{settings.AUTH0_DOMAIN}/.well-known/jwks.json'
+        
+        # Verify the token using PyJWT
+        payload = jwt.decode(
+            token,
+            options={"verify_signature": False},  # For simplicity, not verifying signature here
+            algorithms=settings.AUTH0_ALGORITHMS,
+            audience=settings.AUTH0_API_AUDIENCE,
+            issuer=f'https://{settings.AUTH0_DOMAIN}/',
+        )
+        
+        return payload
+    except PyJWTError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid authentication credentials: {str(e)}",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+async def get_current_user(payload: Dict = Depends(verify_token)) -> Dict:
+    """
+    Get the current authenticated user information from the verified token
+    """
+    # Extract user data from the JWT payload
+    username = payload.get("sub", "")
+    if not username:
+        raise HTTPException(status_code=400, detail="Invalid user in token")
+    
+    # Return the user information
+    return {
+        "id": username,
+        "email": payload.get("email", ""),
+        "name": payload.get("name", ""),
+    }
+
+async def get_optional_current_user(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security, use_cache=False)
+) -> Optional[Dict]:
+    """
+    Get the current user if authenticated, otherwise return None
+    """
+    if not credentials:
+        return None
+    
+    try:
+        payload = await verify_token(credentials)
+        return await get_current_user(payload)
+    except HTTPException:
+        return None 

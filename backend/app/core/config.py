@@ -23,6 +23,14 @@ class Settings(BaseSettings):
         "DATABASE_URL", "sqlite:///./market_tester.db"
     )
     
+    # Auth0 settings
+    AUTH0_DOMAIN: str = os.getenv("AUTH0_DOMAIN", "")
+    AUTH0_API_AUDIENCE: str = os.getenv("AUTH0_API_AUDIENCE", "")
+    AUTH0_ALGORITHMS: List[str] = ["RS256"]
+    AUTH0_ISSUER: str = os.getenv("AUTH0_ISSUER", "")
+    AUTH0_CLIENT_ID: str = os.getenv("AUTH0_CLIENT_ID", "")
+    AUTH0_CLIENT_SECRET: str = os.getenv("AUTH0_CLIENT_SECRET", "")
+    
     class Config:
         env_file = ".env"
         case_sensitive = True
