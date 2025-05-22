@@ -20,4 +20,4 @@ This project is organized into two main components:
 
 ## Getting Started
 
-Check the project_directory.md file for the detailed folder structure. 
+Check the project_directory.md file for the detailed folder structure.
